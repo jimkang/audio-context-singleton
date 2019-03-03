@@ -19,7 +19,6 @@ function AudioContextSingleton() {
   }
 
   function getNewContext(firstParam, secondParam) {
-    var sampleRate = undefined;
     var opts;
     var done;
 
@@ -32,10 +31,6 @@ function AudioContextSingleton() {
       }
     }
 
-    if (opts) {
-      sampleRate = opts.sampleRate;
-    }
-
     if (audioContext) {
       audioContext.close().then(passNewContext);
     } else {
@@ -43,10 +38,14 @@ function AudioContextSingleton() {
     }
 
     function passNewContext() {
+      var acOpts;
+      if (opts && opts.sampleRate) {
+        acOpts = { sampleRate: opts.sampleRate };
+      }
       if (typeof AudioContext === 'function') {
-        audioContext = new AudioContext({ sampleRate });
+        audioContext = new AudioContext(acOpts);
       } else {
-        audioContext = new webkitAudioContext({ sampleRate });
+        audioContext = new webkitAudioContext(acOpts);
       }
       done(null, audioContext);
     }
