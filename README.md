@@ -40,6 +40,10 @@ Usage
       }
     }
 
+Sample rates can be specified in getNewContext by passing an option.
+
+    acSingleton.getNewContext({ sampleRate: 44100 }, callback);
+
 License
 -------
 
