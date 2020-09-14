@@ -1,9 +1,8 @@
 /* global webkitAudioContext */
 
-var callNextTick = require('call-next-tick');
-
 function AudioContextSingleton() {
   var audioContext;
+  var resolvedPromise = Promise.resolve();
 
   return {
     getCurrentContext,
@@ -12,7 +11,7 @@ function AudioContextSingleton() {
 
   function getCurrentContext(done) {
     if (audioContext) {
-      callNextTick(done, null, audioContext);
+      resolvedPromise.then(() => done(null, audioContext));
     } else {
       getNewContext(done);
     }
