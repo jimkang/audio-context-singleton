@@ -1,6 +1,6 @@
 {
   "name": "audio-context-singleton",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "When you want to have an audioContext singleton but don't want to rewrite [this code](index.js), use this. Deals with browser differences in AudioContext and maintains the singleton.",
   "main": "index.js",
   "repository": {
