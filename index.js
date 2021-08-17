@@ -1,6 +1,6 @@
 /* global webkitAudioContext */
 
-function AudioContextSingleton({ offline = false }) {
+function AudioContextSingleton(ctorOpts) {
   var audioContext;
   var resolvedPromise = Promise.resolve();
 
@@ -41,7 +41,7 @@ function AudioContextSingleton({ offline = false }) {
       if (opts && opts.sampleRate) {
         acOpts = { sampleRate: opts.sampleRate };
       }
-      if (offline) {
+      if (ctorOpts && ctorOpts.offline) {
         audioContext = new OfflineAudioContext(acOpts);
       } else {
         if (typeof AudioContext === 'function') {
