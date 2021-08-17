@@ -1,12 +1,12 @@
 /* global webkitAudioContext */
 
-function AudioContextSingleton() {
+function AudioContextSingleton({ offline = false }) {
   var audioContext;
   var resolvedPromise = Promise.resolve();
 
   return {
     getCurrentContext,
-    getNewContext
+    getNewContext,
   };
 
   function getCurrentContext(done) {
@@ -41,10 +41,14 @@ function AudioContextSingleton() {
       if (opts && opts.sampleRate) {
         acOpts = { sampleRate: opts.sampleRate };
       }
-      if (typeof AudioContext === 'function') {
-        audioContext = new AudioContext(acOpts);
+      if (offline) {
+        audioContext = new OfflineAudioContext(acOpts);
       } else {
-        audioContext = new webkitAudioContext(acOpts);
+        if (typeof AudioContext === 'function') {
+          audioContext = new AudioContext(acOpts);
+        } else {
+          audioContext = new webkitAudioContext(acOpts);
+        }
       }
       done(null, audioContext);
     }

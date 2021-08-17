@@ -15,6 +15,7 @@ Usage
 
     var ACSingleton = require('audio-context-singleton');
 
+    // Pass { offline: true } here if you want an OfflineAudioContext.
     var acSingleton = ACSingleton();
     acSingleton.getNewContext(useContext);
     // Can also use getCurrentContext here, which will
