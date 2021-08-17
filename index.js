@@ -37,17 +37,13 @@ function AudioContextSingleton(ctorOpts) {
     }
 
     function passNewContext() {
-      var acOpts;
-      if (opts && opts.sampleRate) {
-        acOpts = { sampleRate: opts.sampleRate };
-      }
       if (ctorOpts && ctorOpts.offline) {
-        audioContext = new OfflineAudioContext(acOpts);
+        audioContext = new OfflineAudioContext(opts);
       } else {
         if (typeof AudioContext === 'function') {
-          audioContext = new AudioContext(acOpts);
+          audioContext = new AudioContext(opts);
         } else {
-          audioContext = new webkitAudioContext(acOpts);
+          audioContext = new webkitAudioContext(opts);
         }
       }
       done(null, audioContext);
