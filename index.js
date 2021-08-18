@@ -9,26 +9,19 @@ function AudioContextSingleton(ctorOpts) {
     getNewContext,
   };
 
-  function getCurrentContext(done) {
+  function getCurrentContext() {
+    var { done } = organizeParams(arguments);
     if (audioContext) {
+      // Warning: opts passed to getCurrentContext are ignored in this case.
+      // TODO: Think about what to do about this.
       resolvedPromise.then(() => done(null, audioContext));
     } else {
-      getNewContext(done);
+      getNewContext(arguments);
     }
   }
 
-  function getNewContext(firstParam, secondParam) {
-    var opts;
-    var done;
-
-    if (typeof firstParam === 'function') {
-      done = firstParam;
-    } else if (typeof secondParam === 'function') {
-      done = secondParam;
-      if (typeof firstParam === 'object') {
-        opts = firstParam;
-      }
-    }
+  function getNewContext() {
+    var { opts, done } = organizeParams(arguments);
 
     if (audioContext) {
       audioContext.close().then(passNewContext);
@@ -49,6 +42,19 @@ function AudioContextSingleton(ctorOpts) {
       done(null, audioContext);
     }
   }
+}
+
+function organizeParams(firstParam, secondParam) {
+  var done, opts;
+  if (typeof firstParam === 'function') {
+    done = firstParam;
+  } else if (typeof secondParam === 'function') {
+    done = secondParam;
+    if (typeof firstParam === 'object') {
+      opts = firstParam;
+    }
+  }
+  return { done, opts };
 }
 
 module.exports = AudioContextSingleton;
