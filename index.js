@@ -23,11 +23,12 @@ function AudioContextSingleton(ctorOpts) {
   function getNewContext() {
     var { opts, done } = organizeParams.apply(null, arguments);
 
-    if (audioContext && audioContext.state !== 'closed') {
+    if (audioContext && typeof audioContext.close === 'function') {
       audioContext.close().then(passNewContext);
-    } else {
-      passNewContext();
+      return;
     }
+
+    passNewContext();
 
     function passNewContext() {
       if (ctorOpts && ctorOpts.offline) {
