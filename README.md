@@ -13,37 +13,19 @@ Installation
 Usage
 -----
 
-    var ACSingleton = require('audio-context-singleton');
+    var AudioContextSingleton = require('audio-context-singleton');
 
     // Pass { offline: true } here if you want an OfflineAudioContext.
-    var acSingleton = ACSingleton();
-    acSingleton.getNewContext(useContext);
-    // Can also use getCurrentContext here, which will
-    // pass a context if it was already created or call
-    // getNewContext for you if it hasn't.
+    var { getCurrent, getNew } = AudioContextSingleton();
+    var audioCtx = getNew();
+    // Get the same context again.
+    audioCtx = getCurrent();
+    await audioCtx.close();
+    var otherCtx = getNew();
 
-    function useContext(error, audioCtx) {
-      if (error) {
-        console.log(error);
-      } else {
-        // Do audio stuff here! Then:
-        acSingleton.getNewContext(useContext2);
-        // Closes the current audio context and creates a new one.
-      }
-    }
+Sample rates can be specified in getNewby passing an option.
 
-    function useContext2(error, audioCtx) {
-      if (error) {
-        console.log(error);
-      } else {
-        // Do audio stuff here! Then:
-        audioCtx.stop();
-      }
-    }
-
-Sample rates can be specified in getNewContext by passing an option.
-
-    acSingleton.getNewContext({ sampleRate: 44100 }, callback);
+    getNew({ sampleRate: 44100 });
 
 License
 -------
